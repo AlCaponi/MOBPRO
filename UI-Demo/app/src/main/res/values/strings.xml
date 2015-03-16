@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">UI-Demo</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="chooseLayout">Wählen Sie eines der folgenden Layouts aus:</string>
+    <string name="title_activity_layout">LayoutActivity</string>
+</resources>

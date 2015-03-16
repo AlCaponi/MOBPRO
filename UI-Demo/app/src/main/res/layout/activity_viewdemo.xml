@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tbxRating"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Check some values.."/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Check some values.."/>
+
+    <DatePicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:minDate="15.3.2015"
+        android:maxDate="1.6.2015" android:datePickerMode="spinner"
+        ></DatePicker>
+
+    <RatingBar
+        android:id="@+id/rbaRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:rating="3.0" android:stepSize="0.5" />
+
+</LinearLayout>

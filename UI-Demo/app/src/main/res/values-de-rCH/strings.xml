@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">UI-Dämo</string>
+    <string name="hello_world">Hellou world!</string>
+    <string name="action_settings">Istellige</string>
+    <string name="chooseLayout">Wähl es Layout uus!</string>
+    <string name="title_activity_layout">Layout Aktiviti</string>
+</resources>
