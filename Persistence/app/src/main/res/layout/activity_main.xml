@@ -1,0 +1,153 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity"
+    android:id="@+id/test">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/title"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="15dp"
+            style="@style/Base.TextAppearance.AppCompat.Large" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Application Preferences"
+            android:id="@+id/appTitle"
+            android:background="#ff92ff81"
+            android:layout_below="@+id/title"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtResumeCounter"
+            android:text="MainActivity on Resume wurde ... aufgerufen"
+            android:layout_below="@+id/appTitle"
+            android:layout_alignLeft="@+id/btnTeaDefaults"
+            android:layout_alignStart="@+id/btnTeaDefaults" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Ich trinke am liebsten..."
+            android:id="@+id/txvSettings"
+            android:layout_below="@+id/txtResumeCounter"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tee Preferences Editieren"
+            android:id="@+id/btnEditSettings"
+            android:layout_below="@+id/txvSettings"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignRight="@+id/appTitle"
+            android:layout_alignEnd="@+id/appTitle"
+            android:onClick="btnEditSettings_OnClick" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tee Default Werte setzen"
+            android:id="@+id/btnTeaDefaults"
+            android:onClick="btnTeaDefaults_OnClick"
+            android:layout_below="@+id/btnEditSettings"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Datei-System"
+            android:id="@+id/textView"
+            android:background="#ff92ff81"
+            android:layout_alignBaseline="@+id/txtFileSystem"
+            android:layout_alignBottom="@+id/txtFileSystem"
+            android:layout_alignRight="@+id/btnSave"
+            android:layout_alignEnd="@+id/btnSave" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtFileSystem"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:hint="Irgendein Text"
+            android:layout_alignParentEnd="false"
+            android:inputType="textMultiLine"
+            android:layout_marginTop="50dp" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Externen Speicher benutzen"
+            android:id="@+id/cbxExternalStorage"
+            android:layout_below="@+id/txtFileSystem"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:baselineAligned="false"
+            android:showDividers="middle">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="SPEICHERN"
+                android:id="@+id/btnSave"
+                android:onClick="txtSave_OnClick"
+                android:layout_below="@+id/cbxExternalStorage"
+                android:layout_alignRight="@+id/txvSettings"
+                android:layout_alignEnd="@+id/txvSettings"
+                android:gravity="left"
+                android:layout_weight="1"
+                android:textAlignment="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="LADEN"
+                android:id="@+id/txtLoad"
+                android:onClick="txtLoad_OnClick"
+                android:layout_below="@+id/cbxExternalStorage"
+                android:layout_alignRight="@+id/txtResumeCounter"
+                android:layout_alignEnd="@+id/txtResumeCounter"
+                android:gravity="right"
+                android:layout_weight="1"
+                android:textAlignment="center" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
