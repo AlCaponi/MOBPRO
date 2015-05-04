@@ -2,3 +2,6 @@
 WG-App/HSLU.WG.API/LocalAccountsApp/App_Data/aspnet-LocalAccountsApp-20141010103649_log.ldf
 *.mdf
 *.cache
+*.suo
+*.suo
+WG-App/HSLU.WG.API/LocalAccountsApp/App_Data/aspnet-LocalAccountsApp-20141010103649.mdf
