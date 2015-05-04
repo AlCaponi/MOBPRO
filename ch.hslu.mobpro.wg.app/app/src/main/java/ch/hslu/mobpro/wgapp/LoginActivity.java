@@ -1,4 +1,4 @@
-package ch.hslu.mobpro.chhslumobpro;
+package ch.hslu.mobpro.wgapp;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -29,7 +29,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.hslu.mobpro.chhslumobprowgapp.R;
+import ch.hslu.mobpro.wgapp.R;
 
 /**
  * A login screen that offers login via email/password.

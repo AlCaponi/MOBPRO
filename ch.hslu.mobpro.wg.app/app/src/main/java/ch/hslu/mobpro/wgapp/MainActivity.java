@@ -1,9 +1,13 @@
-package ch.hslu.mobpro.chhslumobprowgapp;
+package ch.hslu.mobpro.wgapp;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import ch.hslu.mobpro.wgapp.LoginActivity;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -35,5 +39,12 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void  onLoginBtn_Click(View view)
+    {
+        Intent loginIntent = new Intent(this, LoginActivity.class);
+        startActivity(loginIntent);
+
     }
 }
