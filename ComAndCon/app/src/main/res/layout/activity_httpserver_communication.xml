@@ -1,0 +1,106 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="ch.hslu.mobpro.comandcon.HTTPServerCommunication">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Kommunikation mit HTTP-Server"
+        android:id="@+id/txtHTTPServerCom"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="#ffffba3a"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Serveradresse konfigurieren, Daten eingeben und Button klicken."
+        android:id="@+id/txtHint"
+        android:layout_below="@+id/txtHTTPServerCom"
+        android:layout_alignRight="@+id/txtHTTPServerCom"
+        android:layout_alignEnd="@+id/txtHTTPServerCom" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tbxURL"
+        android:layout_below="@+id/txtHint"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:hint="Server URL"
+        android:layout_alignRight="@+id/txtHint"
+        android:layout_alignEnd="@+id/txtHint" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:id="@+id/tbxData"
+        android:layout_below="@+id/tbxURL"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/tbxURL"
+        android:layout_alignEnd="@+id/tbxURL"
+        android:hint="Data" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Abschicken"
+        android:id="@+id/btnSend"
+        android:layout_below="@+id/tbxData"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/tbxData"
+        android:layout_alignEnd="@+id/tbxData"
+        android:onClick="btnSend_OnClick" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Server-State"
+        android:id="@+id/lblServerState"
+        android:layout_below="@+id/btnSend"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/lblServerResponse"
+        android:layout_below="@+id/lblServerState"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Server-Antwort"
+        android:id="@+id/lblServerAntwort"
+        android:layout_below="@+id/lblServerResponse"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/lblServerResponseActual"
+        android:layout_below="@+id/lblServerAntwort"
+        android:layout_toRightOf="@+id/lblServerResponse"
+        android:layout_toEndOf="@+id/lblServerResponse" />
+
+</RelativeLayout>
