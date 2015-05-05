@@ -38,7 +38,9 @@ import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.conn.ssl.X509HostnameVerifier;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.SingleClientConnManager;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
@@ -50,6 +52,9 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
 
 import ch.hslu.mobpro.wgapp.R;
 
@@ -299,10 +304,22 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-
+            HttpResponse response;
             try {
-                HttpClient httpclient = createHttpClient();
-                HttpPost httppost = new HttpPost("https://10.0.2.2:44305/Token");
+                HostnameVerifier hostnameVerifier = org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
+                DefaultHttpClient client = new DefaultHttpClient();
+                SchemeRegistry registry = new SchemeRegistry();
+                SSLSocketFactory socketFactory = SSLSocketFactory.getSocketFactory();
+                socketFactory.setHostnameVerifier((X509HostnameVerifier) hostnameVerifier);
+                registry.register(new Scheme("https", socketFactory, 443));
+                SingleClientConnManager mgr = new SingleClientConnManager(client.getParams(), registry);
+                DefaultHttpClient httpClient = new DefaultHttpClient(mgr, client.getParams());
+
+                // Set verifier
+                HttpsURLConnection.setDefaultHostnameVerifier(hostnameVerifier);
+
+                //HttpClient httpclient = new DefaultHttpClient();
+                HttpPost httppost = new HttpPost("https://mobpro.dzim.ch/Token");
 
                 // Add your data
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
@@ -312,7 +329,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                 httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
                 // Execute HTTP Post Request
-                HttpResponse response = httpclient.execute(httppost);
+                response = httpClient.execute(httppost);
 
             }  catch (ClientProtocolException e) {
                 e.printStackTrace();
