@@ -1,28 +1,32 @@
 package ch.hslu.mobpro.wgapp;
 
-import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
-import ch.hslu.mobpro.wgapp.LoginActivity;
+import ch.hslu.mobpro.wgapp.R;
 
-
-public class MainActivity extends ActionBarActivity {
+public class GroupListActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_group_list);
+
+        String[] codeLearnChapters = new String[] { "Android Introduction","Android Setup/Installation","Android Hello World","Android Layouts/Viewgroups","Android Activity & Lifecycle","Intents in Android"};
+        ArrayAdapter<String> codeLearnArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, codeLearnChapters);
+        ListView codeLearnLessons = (ListView)findViewById(R.id.lvGroupList);
+        codeLearnLessons.setAdapter(codeLearnArrayAdapter);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_group_list, menu);
         return true;
     }
 
@@ -39,18 +43,5 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void  onLoginBtn_Click(View view)
-    {
-        Intent loginIntent = new Intent(this, LoginActivity.class);
-        startActivity(loginIntent);
-
-    }
-
-    public void btnGroup_OnClick(View view)
-    {
-        Intent groupListIntent = new Intent(this, GroupListActivity.class);
-        startActivity(groupListIntent);
     }
 }
