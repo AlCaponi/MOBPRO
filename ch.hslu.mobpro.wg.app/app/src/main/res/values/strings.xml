@@ -6,4 +6,8 @@
     <string name="title_activity_group_list">GroupListActivity</string>
     <string name="title_activity_list">Lists</string>
     <string name="title_activity_list_detail">ListDetailActivity</string>
+    <string name="NewList">New List</string>
+    <string name="name">Name</string>
+    <string name="Save">Save</string>
+    <string name="cancel">Cancel</string>
 </resources>

@@ -9,6 +9,7 @@ namespace LocalAccountsApp.Controllers
     using System.Threading.Tasks;
     using System.Web;
     using System.Web.Http.Description;
+    using System.Web.WebSockets;
 
     using Microsoft.Data.OData.Metadata;
 
@@ -60,8 +61,31 @@ namespace LocalAccountsApp.Controllers
             {
                 if (context.ListItemEntitySet.Any(x => x.ListItemID == listItemEntity.ListItemID) == false)
                 {
-                    context.ListItemEntitySet.Add(listItemEntity);
-                    context.SaveChanges();
+                    if (listItemEntity.ListItemID == 0)
+                    {
+                        int maxId = context.ListItemEntitySet.Max(x => x.ListItemID);
+                        listItemEntity.ListItemID = maxId + 1;
+                    }
+                    context.ListItemEntitySet.Add(new ListItemEntity()
+                                                      {
+                                                          CreatedDate = listItemEntity.CreatedDate, 
+                                                          IsChecked = listItemEntity.IsChecked, 
+                                                          ListEntityListID = listItemEntity.ListEntityListID, 
+                                                          ListItemID = listItemEntity.ListItemID,
+                                                          Name = listItemEntity.Name,
+                                                          ListEntity = new ListEntity() { ListID = listItemEntity.ListEntityListID}
+                                                      });
+
+                    try
+                    {
+                        context.SaveChanges();
+                    }
+                    catch (Exception ex)
+                    {
+                        
+                        throw;
+                    }
+                    
                     return this.Ok(listItemEntity);
                 }
             }

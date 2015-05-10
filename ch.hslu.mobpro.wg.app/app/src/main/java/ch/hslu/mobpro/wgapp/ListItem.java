@@ -4,61 +4,61 @@ package ch.hslu.mobpro.wgapp;
  * Created by Dany on 10.05.2015.
  */
 public class ListItem {
-    private int listItemID;
-    private String name;
-    private String isChecked;
-    private String createDate;
-    private int listEntityListID;
+    private int ListItemID;
+    private String Name;
+    private String IsChecked;
+    private String CreatedDate;
+    private int ListEntityListID;
 
     public ListItem(int listItemID, String name, String isChecked, String createDate, int listEntityListID) {
-        this.listItemID = listItemID;
-        this.name = name;
-        this.isChecked = isChecked;
-        this.createDate = createDate;
-        this.listEntityListID = listEntityListID;
+        this.ListItemID = listItemID;
+        this.Name = name;
+        this.IsChecked = isChecked;
+        this.CreatedDate = createDate;
+        this.ListEntityListID = listEntityListID;
     }
 
     public ListItem() {
     }
 
     public int getListItemID() {
-        return listItemID;
+        return ListItemID;
     }
 
     public void setListItemID(int listItemID) {
-        this.listItemID = listItemID;
+        this.ListItemID = listItemID;
     }
 
     public String getName() {
-        return name;
+        return Name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.Name = name;
     }
 
     public String getIsChecked() {
-        return isChecked;
+        return IsChecked;
     }
 
     public void setIsChecked(String isChecked) {
-        this.isChecked = isChecked;
+        this.IsChecked = isChecked;
     }
 
     public String getCreateDate() {
-        return createDate;
+        return CreatedDate;
     }
 
     public void setCreateDate(String createDate) {
-        this.createDate = createDate;
+        this.CreatedDate = createDate;
     }
 
     public int getListEntityListID() {
-        return listEntityListID;
+        return ListEntityListID;
     }
 
     public void setListEntityListID(int listEntityListID) {
-        this.listEntityListID = listEntityListID;
+        this.ListEntityListID = listEntityListID;
     }
 
     @Override
