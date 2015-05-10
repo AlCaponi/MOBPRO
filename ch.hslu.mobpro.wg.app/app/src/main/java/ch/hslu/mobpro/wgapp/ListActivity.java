@@ -29,27 +29,27 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-public class GroupListActivity extends ActionBarActivity {
+import ch.hslu.mobpro.wgapp.R;
+
+public class ListActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_group_list);
+        setContentView(R.layout.activity_list);
 
         new RetrieveFeedTask(this).execute();
 
-        final ListView codeLearnLessons = (ListView)findViewById(R.id.lvGroupList);
-        final Activity currentActivity = this;
-
-        codeLearnLessons.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        final ListView listView = (ListView) findViewById(R.id.lvListList);
+        final Context context = this;
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // ToDo: Get GroupId by position
+                DisplayValue selectedItem = (DisplayValue) listView.getItemAtPosition(position);
 
-                DisplayValue selectedItem = (DisplayValue) codeLearnLessons.getItemAtPosition(position);
-
-                Intent intent = new Intent(currentActivity, ListActivity.class);
-                intent.putExtra("GroupId", selectedItem.getId());
+                Intent intent = new Intent(context, ListDetailActivity.class);
+                intent.putExtra("ListID", selectedItem.getId());
+                intent.putExtra("ListName", selectedItem.getDisplayValue());
                 startActivity(intent);
             }
         });
@@ -75,18 +75,25 @@ public class GroupListActivity extends ActionBarActivity {
         };
         protected Void doInBackground(String... urls) {
             try {
+
                 URL url = null;
                 String response = null;
                 String parameters = "";
-                url = new URL("https://mobpro.dzim.ch/api/WGGroups");
+                url = new URL("https://mobpro.dzim.ch/api/list");
 
                 // Create an SSLContext that uses our TrustManager
                 SSLContext ctx = SSLContext.getInstance("TLS");
-                ctx.init(null, new TrustManager[] {
+                ctx.init(null, new TrustManager[]{
                         new X509TrustManager() {
-                            public void checkClientTrusted(X509Certificate[] chain, String authType) {}
-                            public void checkServerTrusted(X509Certificate[] chain, String authType) {}
-                            public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[]{}; }
+                            public void checkClientTrusted(X509Certificate[] chain, String authType) {
+                            }
+
+                            public void checkServerTrusted(X509Certificate[] chain, String authType) {
+                            }
+
+                            public X509Certificate[] getAcceptedIssuers() {
+                                return new X509Certificate[]{};
+                            }
                         }
                 }, null);
                 HttpsURLConnection.setDefaultSSLSocketFactory(ctx.getSocketFactory());
@@ -130,23 +137,31 @@ public class GroupListActivity extends ActionBarActivity {
 
         @Override
         protected void onPostExecute(Void result) {
-            DisplayValue[] displayValues = new DisplayValue[mJsonArray.length()];
+            DisplayValue[] items = new DisplayValue[mJsonArray.length()];
+
+            int groupId = ((Activity)mContext).getIntent().getIntExtra("GroupId", 0);
+
             for(int idx = 0; idx < mJsonArray.length(); idx++)
             {
                 JSONObject jsonObject =  mJsonArray.getJSONObject(idx);
-                DisplayValue item = new DisplayValue(jsonObject.getInt("GroupID"), jsonObject.getString("GroupName"));
-                displayValues[idx] = item;
+                int itemGroupId = jsonObject.getInt("GroupsGroupID");
+                if (itemGroupId == groupId)
+                {
+                    DisplayValue item = new DisplayValue(jsonObject.getInt("ListID"), jsonObject.getString("ListName"));
+                    items[idx] = item;
+                }
             }
-            ArrayAdapter<DisplayValue> codeLearnArrayAdapter = new ArrayAdapter<DisplayValue>(mContext, android.R.layout.simple_list_item_1, displayValues);
-            ListView codeLearnLessons = (ListView)findViewById(R.id.lvGroupList);
+            ArrayAdapter<DisplayValue> codeLearnArrayAdapter = new ArrayAdapter<DisplayValue>(mContext, android.R.layout.simple_list_item_1, items);
+            ListView codeLearnLessons = (ListView)findViewById(R.id.lvListList);
             codeLearnLessons.setAdapter(codeLearnArrayAdapter);
         }
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_group_list, menu);
+        getMenuInflater().inflate(R.menu.menu_list, menu);
         return true;
     }
 

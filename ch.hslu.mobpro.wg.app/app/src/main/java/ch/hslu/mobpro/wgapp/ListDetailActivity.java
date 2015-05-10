@@ -2,15 +2,12 @@ package ch.hslu.mobpro.wgapp;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -21,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -29,30 +27,15 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-public class GroupListActivity extends ActionBarActivity {
+import ch.hslu.mobpro.wgapp.R;
+
+public class ListDetailActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_group_list);
-
+        setContentView(R.layout.activity_list_detail);
         new RetrieveFeedTask(this).execute();
-
-        final ListView codeLearnLessons = (ListView)findViewById(R.id.lvGroupList);
-        final Activity currentActivity = this;
-
-        codeLearnLessons.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // ToDo: Get GroupId by position
-
-                DisplayValue selectedItem = (DisplayValue) codeLearnLessons.getItemAtPosition(position);
-
-                Intent intent = new Intent(currentActivity, ListActivity.class);
-                intent.putExtra("GroupId", selectedItem.getId());
-                startActivity(intent);
-            }
-        });
     }
 
     class RetrieveFeedTask extends AsyncTask<String, Void, Void> {
@@ -75,18 +58,27 @@ public class GroupListActivity extends ActionBarActivity {
         };
         protected Void doInBackground(String... urls) {
             try {
+
+                int listId = getIntent().getIntExtra("ListID", 0);
+
                 URL url = null;
                 String response = null;
                 String parameters = "";
-                url = new URL("https://mobpro.dzim.ch/api/WGGroups");
+                url = new URL("https://mobpro.dzim.ch/api/listitem/" + listId);
 
                 // Create an SSLContext that uses our TrustManager
                 SSLContext ctx = SSLContext.getInstance("TLS");
-                ctx.init(null, new TrustManager[] {
+                ctx.init(null, new TrustManager[]{
                         new X509TrustManager() {
-                            public void checkClientTrusted(X509Certificate[] chain, String authType) {}
-                            public void checkServerTrusted(X509Certificate[] chain, String authType) {}
-                            public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[]{}; }
+                            public void checkClientTrusted(X509Certificate[] chain, String authType) {
+                            }
+
+                            public void checkServerTrusted(X509Certificate[] chain, String authType) {
+                            }
+
+                            public X509Certificate[] getAcceptedIssuers() {
+                                return new X509Certificate[]{};
+                            }
                         }
                 }, null);
                 HttpsURLConnection.setDefaultSSLSocketFactory(ctx.getSocketFactory());
@@ -130,23 +122,43 @@ public class GroupListActivity extends ActionBarActivity {
 
         @Override
         protected void onPostExecute(Void result) {
-            DisplayValue[] displayValues = new DisplayValue[mJsonArray.length()];
-            for(int idx = 0; idx < mJsonArray.length(); idx++)
-            {
-                JSONObject jsonObject =  mJsonArray.getJSONObject(idx);
-                DisplayValue item = new DisplayValue(jsonObject.getInt("GroupID"), jsonObject.getString("GroupName"));
-                displayValues[idx] = item;
+            ArrayList<ListItem> items = new ArrayList<ListItem>();
+
+            int currentListId = getIntent().getIntExtra("ListID", 0);
+            String currentListName = getIntent().getStringExtra("ListName");
+
+            for (int idx = 0; idx < mJsonArray.length(); idx++) {
+                JSONObject jsonObject = mJsonArray.getJSONObject(idx);
+                ListItem item = new ListItem(
+                        jsonObject.getInt("ListItemID"),
+                        jsonObject.getString("Name"),
+                        jsonObject.getString("IsChecked"),
+                        jsonObject.getString("CreatedDate"),
+                        jsonObject.getInt("ListEntityListID"));
+
+                if (item.getListEntityListID() == currentListId) {
+                    items.add(item);
+                }
             }
-            ArrayAdapter<DisplayValue> codeLearnArrayAdapter = new ArrayAdapter<DisplayValue>(mContext, android.R.layout.simple_list_item_1, displayValues);
-            ListView codeLearnLessons = (ListView)findViewById(R.id.lvGroupList);
+
+            ArrayAdapter<ListItem> codeLearnArrayAdapter = new ArrayAdapter<ListItem>(mContext, android.R.layout.simple_list_item_multiple_choice, items);
+            ListView codeLearnLessons = (ListView)findViewById(R.id.lvListItems);
             codeLearnLessons.setAdapter(codeLearnArrayAdapter);
+
+            ListView listView = (ListView)findViewById(R.id.lvListItems);
+            int position = 0;
+            for (ListItem item : items)
+            {
+                boolean isChecked = Boolean.valueOf(item.getIsChecked());
+                listView.setItemChecked(position++, isChecked);
+            }
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_group_list, menu);
+        getMenuInflater().inflate(R.menu.menu_list_detail, menu);
         return true;
     }
 
