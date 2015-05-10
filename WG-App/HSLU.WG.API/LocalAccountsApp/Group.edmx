@@ -4,19 +4,70 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="WGAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="Groups">
-          <Key>
-            <PropertyRef Name="GroupID" />
-          </Key>
-          <Property Name="GroupID" Type="int" Nullable="false" />
-          <Property Name="GroupName" Type="varchar" MaxLength="50" />
-        </EntityType>
-        <EntityContainer Name="WGAppModelStoreContainer">
-          <EntitySet Name="Groups" EntityType="Self.Groups" Schema="ApiUser" store:Type="Tables" />
-        </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+    <Schema Namespace="WGAppModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="WGAppModelStoreContainer">
+    <EntitySet Name="Groups" EntityType="WGAppModel.Store.Groups" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ListEntitySet" EntityType="WGAppModel.Store.ListEntitySet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ListItemEntitySet" EntityType="WGAppModel.Store.ListItemEntitySet" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="GroupsListEntity" Association="WGAppModel.Store.GroupsListEntity">
+      <End Role="Groups" EntitySet="Groups" />
+      <End Role="ListEntity" EntitySet="ListEntitySet" />
+    </AssociationSet>
+    <AssociationSet Name="ListEntityListItemEntity" Association="WGAppModel.Store.ListEntityListItemEntity">
+      <End Role="ListEntity" EntitySet="ListEntitySet" />
+      <End Role="ListItemEntity" EntitySet="ListItemEntitySet" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Groups">
+    <Key>
+      <PropertyRef Name="GroupID" />
+    </Key>
+    <Property Name="GroupID" Type="int" Nullable="false" />
+    <Property Name="GroupName" Type="varchar" Nullable="true" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="ListEntitySet">
+    <Key>
+      <PropertyRef Name="ListID" />
+    </Key>
+    <Property Name="ListID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ListName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="GroupsGroupID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ListItemEntitySet">
+    <Key>
+      <PropertyRef Name="ListItemID" />
+    </Key>
+    <Property Name="ListItemID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="IsChecked" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="CreatedDate" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="ListEntityListID" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="GroupsListEntity">
+    <End Role="Groups" Type="WGAppModel.Store.Groups" Multiplicity="1" />
+    <End Role="ListEntity" Type="WGAppModel.Store.ListEntitySet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Groups">
+        <PropertyRef Name="GroupID" />
+      </Principal>
+      <Dependent Role="ListEntity">
+        <PropertyRef Name="GroupsGroupID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ListEntityListItemEntity">
+    <End Role="ListEntity" Type="WGAppModel.Store.ListEntitySet" Multiplicity="1" />
+    <End Role="ListItemEntity" Type="WGAppModel.Store.ListItemEntitySet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ListEntity">
+        <PropertyRef Name="ListID" />
+      </Principal>
+      <Dependent Role="ListItemEntity">
+        <PropertyRef Name="ListEntityListID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="WGAppModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -29,24 +80,98 @@
         </EntityType>
         <EntityContainer Name="WGAppEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Groups" EntityType="Self.Groups" />
+          <EntitySet Name="ListEntitySet" EntityType="WGAppModel.ListEntity" />
+          <AssociationSet Name="GroupsListEntity" Association="WGAppModel.GroupsListEntity">
+            <End Role="Groups" EntitySet="Groups" />
+            <End Role="ListEntity" EntitySet="ListEntitySet" />
+          </AssociationSet>
+          <EntitySet Name="ListItemEntitySet" EntityType="WGAppModel.ListItemEntity" />
+          <AssociationSet Name="ListEntityListItemEntity" Association="WGAppModel.ListEntityListItemEntity">
+            <End Role="ListEntity" EntitySet="ListEntitySet" />
+            <End Role="ListItemEntity" EntitySet="ListItemEntitySet" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="ListEntity">
+          <Key>
+            <PropertyRef Name="ListID" />
+          </Key>
+          <Property Name="ListID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ListName" Type="String" Nullable="false" />
+          <NavigationProperty Name="Groups" Relationship="WGAppModel.GroupsListEntity" FromRole="ListEntity" ToRole="Groups" />
+          <Property Name="GroupsGroupID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ListItems" Relationship="WGAppModel.ListEntityListItemEntity" FromRole="ListEntity" ToRole="ListItemEntity" />
+        </EntityType>
+        <Association Name="GroupsListEntity">
+          <End Type="WGAppModel.Groups" Role="Groups" Multiplicity="1" />
+          <End Type="WGAppModel.ListEntity" Role="ListEntity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Groups">
+              <PropertyRef Name="GroupID" />
+            </Principal>
+            <Dependent Role="ListEntity">
+              <PropertyRef Name="GroupsGroupID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ListItemEntity">
+          <Key>
+            <PropertyRef Name="ListItemID" />
+          </Key>
+          <Property Name="ListItemID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="IsChecked" Type="String" Nullable="false" />
+          <Property Name="CreatedDate" Type="String" Nullable="false" />
+          <NavigationProperty Name="ListEntity" Relationship="WGAppModel.ListEntityListItemEntity" FromRole="ListItemEntity" ToRole="ListEntity" />
+          <Property Name="ListEntityListID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="ListEntityListItemEntity">
+          <End Type="WGAppModel.ListEntity" Role="ListEntity" Multiplicity="1" />
+          <End Type="WGAppModel.ListItemEntity" Role="ListItemEntity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ListEntity">
+              <PropertyRef Name="ListID" />
+            </Principal>
+            <Dependent Role="ListItemEntity">
+              <PropertyRef Name="ListEntityListID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="WGAppModelStoreContainer" CdmEntityContainer="WGAppEntities">
-          <EntitySetMapping Name="Groups">
-            <EntityTypeMapping TypeName="WGAppModel.Groups">
-              <MappingFragment StoreEntitySet="Groups">
-                <ScalarProperty Name="GroupID" ColumnName="GroupID" />
-                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-        </EntityContainerMapping>
-      </Mapping>
-    </edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="WGAppModelStoreContainer" CdmEntityContainer="WGAppEntities">
+    <EntitySetMapping Name="Groups">
+      <EntityTypeMapping TypeName="IsTypeOf(WGAppModel.Groups)">
+        <MappingFragment StoreEntitySet="Groups">
+          <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+          <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ListEntitySet">
+      <EntityTypeMapping TypeName="IsTypeOf(WGAppModel.ListEntity)">
+        <MappingFragment StoreEntitySet="ListEntitySet">
+          <ScalarProperty Name="ListID" ColumnName="ListID" />
+          <ScalarProperty Name="ListName" ColumnName="ListName" />
+          <ScalarProperty Name="GroupsGroupID" ColumnName="GroupsGroupID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ListItemEntitySet">
+      <EntityTypeMapping TypeName="IsTypeOf(WGAppModel.ListItemEntity)">
+        <MappingFragment StoreEntitySet="ListItemEntitySet">
+          <ScalarProperty Name="ListItemID" ColumnName="ListItemID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="IsChecked" ColumnName="IsChecked" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="ListEntityListID" ColumnName="ListEntityListID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
   <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
@@ -60,7 +185,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="false" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
-        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>
     </Options>

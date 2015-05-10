@@ -224,6 +224,12 @@
     <Compile Include="Groups.cs">
       <DependentUpon>Group.tt</DependentUpon>
     </Compile>
+    <Compile Include="ListEntity.cs">
+      <DependentUpon>Group.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ListItemEntity.cs">
+      <DependentUpon>Group.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\GroupModel.cs" />
@@ -260,6 +266,7 @@
     <Content Include="Group.edmx.diagram">
       <DependentUpon>Group.edmx</DependentUpon>
     </Content>
+    <Content Include="Group.edmx.sql" />
     <Content Include="Group.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Group.edmx</DependentUpon>

@@ -17,6 +17,7 @@ namespace LocalAccountsApp.Controllers
 
         public ListModel Get(string id)
         {
+            
             if (id == "42")
             {
                 ListModel model = new ListModel();

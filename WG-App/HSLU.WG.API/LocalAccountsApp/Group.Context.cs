@@ -26,5 +26,7 @@ namespace LocalAccountsApp
         }
     
         public virtual DbSet<Groups> Groups { get; set; }
+        public virtual DbSet<ListEntity> ListEntitySet { get; set; }
+        public virtual DbSet<ListItemEntity> ListItemEntitySet { get; set; }
     }
 }
