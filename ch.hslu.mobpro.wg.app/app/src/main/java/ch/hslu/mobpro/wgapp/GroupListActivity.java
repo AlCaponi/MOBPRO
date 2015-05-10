@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -113,15 +114,19 @@ public class GroupListActivity extends ActionBarActivity {
 
         @Override
         protected void onPostExecute(Void result) {
-            String[] codeLearnChapters = new String[mJsonArray.length()];
-            for(int idx = 0; idx < mJsonArray.length(); idx++)
-            {
-                JSONObject jsonObject =  mJsonArray.getJSONObject(idx);
-                codeLearnChapters[idx] = jsonObject.getString("GroupName");
+            try{
+                String[] codeLearnChapters = new String[mJsonArray.length()];
+                for(int idx = 0; idx < mJsonArray.length(); idx++)
+                {
+                    JSONObject jsonObject =  mJsonArray.getJSONObject(idx);
+                    codeLearnChapters[idx] = jsonObject.getString("GroupName");
+                }
+                ArrayAdapter<String> codeLearnArrayAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_1, codeLearnChapters);
+                ListView codeLearnLessons = (ListView)findViewById(R.id.lvGroupList);
+                codeLearnLessons.setAdapter(codeLearnArrayAdapter);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-            ArrayAdapter<String> codeLearnArrayAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_1, codeLearnChapters);
-            ListView codeLearnLessons = (ListView)findViewById(R.id.lvGroupList);
-            codeLearnLessons.setAdapter(codeLearnArrayAdapter);
         }
     }
 

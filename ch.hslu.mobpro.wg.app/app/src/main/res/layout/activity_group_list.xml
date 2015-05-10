@@ -5,7 +5,17 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="ch.hslu.mobpro.wgapp.GroupListActivity">
-
+    <menu xmlns:android="http://schemas.android.com/apk/res/android" >
+        <!-- Search, should appear as action button -->
+        <item android:id="@+id/action_add"
+            android:icon="@drawable/ic_action_add_group"
+            android:title="@string/action_add"
+            android:showAsAction="ifRoom" />
+        <!-- Settings, should always be in the overflow -->
+        <item android:id="@+id/action_settings"
+            android:title="@string/action_settings"
+            android:showAsAction="never" />
+    </menu>
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
