@@ -11,7 +11,10 @@ namespace LocalAccountsApp
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations.Schema;
+
+    using Newtonsoft.Json;
+
     public partial class ListEntity
     {
         public ListEntity()
@@ -23,7 +26,10 @@ namespace LocalAccountsApp
         public string ListName { get; set; }
         public int GroupsGroupID { get; set; }
     
+        [JsonIgnore]
         public virtual Groups Groups { get; set; }
+
+        [JsonIgnore]
         public virtual ICollection<ListItemEntity> ListItems { get; set; }
     }
 }

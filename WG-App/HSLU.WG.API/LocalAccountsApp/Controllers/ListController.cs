@@ -1,39 +1,91 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Web.Http;
-using System.Web.Mvc;
-using LocalAccountsApp.Models;
-using Microsoft.Ajax.Utilities;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ListController.cs" company="">
 
 namespace LocalAccountsApp.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Entity;
+    using System.Data.Entity.Infrastructure;
+    using System.Text.RegularExpressions;
+    using System.Threading.Tasks;
+    using System.Web;
+    using System.Web.Http;
+    using System.Web.Http.Description;
+    using System.Web.Http.OData;
+    using System.Web.Http.Results;
+
     public class ListController : ApiController
     {
-        public ICollection<ListModel> Get()
+      
+        [ResponseType(typeof(ICollection<ListEntity>))]
+        public async Task<IHttpActionResult> GetListModel()
         {
-            return new List<ListModel>() {Get("")};
+            using (WGAppEntities context = new WGAppEntities())
+            {
+                ICollection<ListEntity> lists = await context.ListEntitySet.ToListAsync();
+                return this.Ok(lists);
+            }
         }
 
-        public ListModel Get(string id)
+        [ResponseType(typeof(ListEntity))]
+        public async Task<IHttpActionResult> GetListModel(string id)
         {
-            
-            if (id == "42")
+            string username = HttpContext.Current.User.Identity.Name;
+
+            using (WGAppEntities context = new WGAppEntities())
             {
-                ListModel model = new ListModel();
-                model.Id = 42;
-                model.Name = "1337";
-                model.Items = new List<ListItemModel>();
-                model.Items.Add(new ListItemModel()
+                ListEntity list = await context.ListEntitySet.FirstOrDefaultAsync(l => l.ListID.ToString() == id);
+
+                if (list == null)
                 {
-                    CreateDate = DateTime.Now,
-                    Id = 1,
-                    ListId = 42,
-                    Name = "Hello Item!"
-                });
-                return model;
+                    return this.NotFound();
+                }
+
+                return this.Ok(list);
             }
-            return new ListModel(){Id = 1, Name = "Hello world!"};
+        }
+
+        public async Task<IHttpActionResult> Post (ListEntity listEntity)
+        {
+            using (WGAppEntities context = new WGAppEntities())
+            {
+                ListEntity list = await context.ListEntitySet.FirstOrDefaultAsync(x => x.ListID == listEntity.ListID);
+                if (list == null)
+                {
+                    if (listEntity.ListID == 0)
+                    {
+                        int lastId = await context.ListEntitySet.MaxAsync(x => x.ListID);
+                        listEntity.ListID = lastId + 1;
+                    }
+                    context.ListEntitySet.Add(listEntity);
+
+                    await context.SaveChangesAsync();
+                    return this.Ok(listEntity);
+                }
+
+                return NotFound();
+            }
+
+        }
+
+        public async Task<IHttpActionResult> Put(ListEntity listEntity)
+        {
+            using (WGAppEntities context = new WGAppEntities())
+            {
+                ListEntity list = await context.ListEntitySet.FirstOrDefaultAsync(x => x.ListID == listEntity.ListID);
+                if (list == null)
+                {
+                    return NotFound();
+                }
+
+                list.GroupsGroupID = listEntity.GroupsGroupID;
+                list.ListName = listEntity.ListName;
+                
+                await context.SaveChangesAsync();
+
+                return this.Ok(list);
+            }
         }
     }
 }

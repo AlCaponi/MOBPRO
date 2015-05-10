@@ -11,7 +11,9 @@ namespace LocalAccountsApp
 {
     using System;
     using System.Collections.Generic;
-    
+
+    using Newtonsoft.Json;
+
     public partial class ListItemEntity
     {
         public int ListItemID { get; set; }
@@ -20,6 +22,7 @@ namespace LocalAccountsApp
         public string CreatedDate { get; set; }
         public int ListEntityListID { get; set; }
     
+        [JsonIgnore]
         public virtual ListEntity ListEntity { get; set; }
     }
 }
