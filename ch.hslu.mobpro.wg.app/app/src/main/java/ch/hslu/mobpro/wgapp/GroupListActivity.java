@@ -1,12 +1,16 @@
 package ch.hslu.mobpro.wgapp;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -35,8 +39,21 @@ public class GroupListActivity extends ActionBarActivity {
 
         new RetrieveFeedTask(this).execute();
 
+        final ListView codeLearnLessons = (ListView)findViewById(R.id.lvGroupList);
+        final Activity currentActivity = this;
 
+        codeLearnLessons.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // ToDo: Get GroupId by position
 
+                DisplayValue selectedItem = (DisplayValue) codeLearnLessons.getItemAtPosition(position);
+
+                Intent intent = new Intent(currentActivity, ListActivity.class);
+                intent.putExtra("GroupId", selectedItem.getId());
+                startActivity(intent);
+            }
+        });
     }
 
     class RetrieveFeedTask extends AsyncTask<String, Void, Void> {
@@ -114,19 +131,16 @@ public class GroupListActivity extends ActionBarActivity {
 
         @Override
         protected void onPostExecute(Void result) {
-            try{
-                String[] codeLearnChapters = new String[mJsonArray.length()];
-                for(int idx = 0; idx < mJsonArray.length(); idx++)
-                {
-                    JSONObject jsonObject =  mJsonArray.getJSONObject(idx);
-                    codeLearnChapters[idx] = jsonObject.getString("GroupName");
-                }
-                ArrayAdapter<String> codeLearnArrayAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_1, codeLearnChapters);
-                ListView codeLearnLessons = (ListView)findViewById(R.id.lvGroupList);
-                codeLearnLessons.setAdapter(codeLearnArrayAdapter);
-            } catch (JSONException e) {
-                e.printStackTrace();
+            DisplayValue[] displayValues = new DisplayValue[mJsonArray.length()];
+            for(int idx = 0; idx < mJsonArray.length(); idx++)
+            {
+                JSONObject jsonObject =  mJsonArray.getJSONObject(idx);
+                DisplayValue item = new DisplayValue(jsonObject.getInt("GroupID"), jsonObject.getString("GroupName"));
+                displayValues[idx] = item;
             }
+            ArrayAdapter<DisplayValue> codeLearnArrayAdapter = new ArrayAdapter<DisplayValue>(mContext, android.R.layout.simple_list_item_1, displayValues);
+            ListView codeLearnLessons = (ListView)findViewById(R.id.lvGroupList);
+            codeLearnLessons.setAdapter(codeLearnArrayAdapter);
         }
     }
 

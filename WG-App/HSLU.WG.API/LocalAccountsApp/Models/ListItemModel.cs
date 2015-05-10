@@ -15,12 +15,13 @@ namespace LocalAccountsApp.Models
         [ForeignKey("ListListItem")]
         public int ListId { get; set; }
 
+        public virtual ListModel List { get; set; }
+
         public string Name { get; set; }
 
         public bool IsChecked { get; set; }
 
         public DateTime CreateDate { get; set; }
 
-        public virtual ICollection<ListModel> Lists { get; set; } 
     }
 }

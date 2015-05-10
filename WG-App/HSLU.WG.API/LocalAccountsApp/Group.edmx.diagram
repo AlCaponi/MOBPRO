@@ -6,6 +6,10 @@
     <edmx:Diagrams>
       <Diagram DiagramId="079236092f5743dd8c57b3db9bfffeff" Name="Diagram1">
         <EntityTypeShape EntityType="WGAppModel.Groups" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WGAppModel.ListEntity" Width="1.5" PointX="3.125" PointY="1.625" />
+        <AssociationConnector Association="WGAppModel.GroupsListEntity" />
+        <EntityTypeShape EntityType="WGAppModel.ListItemEntity" Width="1.5" PointX="5.375" PointY="1.375" />
+        <AssociationConnector Association="WGAppModel.ListEntityListItemEntity" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

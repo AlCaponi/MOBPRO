@@ -43,6 +43,14 @@
             android:name=".GroupListActivity"
             android:label="@string/title_activity_group_list" >
         </activity>
+        <activity
+            android:name=".ListActivity"
+            android:label="@string/title_activity_list" >
+        </activity>
+        <activity
+            android:name=".ListDetailActivity"
+            android:label="@string/title_activity_list_detail" >
+        </activity>
     </application>
 
 </manifest>
